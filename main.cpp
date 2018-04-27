@@ -1,6 +1,6 @@
 #include <iostream>
 #include "AStar.hpp"
-
+using namespace std;
 int main()
 {
     AStar::Generator generator;
@@ -10,14 +10,15 @@ int main()
     generator.setHeuristic(AStar::Heuristic::euclidean);
     generator.setDiagonalMovement(true);
 
-    std::cout << "Generate path ..." << std::endl ;
+    cout << "Generate path ..." << endl ;
     // This method returns vector of coordinates from target to source.
     //add collision
     generator.addCollision({10,10});
     auto path = generator.findPath({0, 0}, {20, 20});
 
+
     for(auto& coordinate : path) {
-        std::cout << coordinate.x << " " << coordinate.y << std::endl;
+        cout << coordinate.x << " " << coordinate.y << endl;
     }
 }
 
