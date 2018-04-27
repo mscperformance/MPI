@@ -1,3 +1,5 @@
 #Products
 /bin/Debug/*
 /obj/Debug/*
+*.exe
+*.o
