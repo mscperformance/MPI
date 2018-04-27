@@ -12,3 +12,16 @@
 	<iostream>
 	"AStar.hpp"
 
+1524823679 source:c:\users\admin\desktop\github\mpi\astar.cpp
+	"AStar.hpp"
+	<algorithm>
+
+1524823760 c:\users\admin\desktop\github\mpi\astar.hpp
+	<vector>
+	<functional>
+	<set>
+
+1524824740 source:c:\users\admin\desktop\github\mpi\main.cpp
+	<iostream>
+	"AStar.hpp"
+
