@@ -2,9 +2,10 @@
 
 #include "AStar.hpp"
 #include <algorithm>
+#include <iostream>
 
 using namespace std::placeholders;
-
+using namespace std;
 bool AStar::Vec2i::operator == (const Vec2i& coordinates_)
 {
     return (x == coordinates_.x && y == coordinates_.y);
@@ -37,6 +38,37 @@ AStar::Generator::Generator()
     };
 }
 
+void AStar::Generator::printWorld()
+{
+    //add labels
+    for ( int j = 0 ; j < worldSize.x; j++) {
+        cout << " " << j << " ";
+    }
+    cout<<endl;
+    //divider
+    for ( int j = 0 ; j < worldSize.x; j++) {
+        cout<<"---";
+    }
+    cout<<endl;
+    cout<<" x = empty space " <<endl;
+    cout<<" # = obstacle " <<endl;
+    //divider
+    for ( int j = 0 ; j < worldSize.x; j++) {
+        cout<<"---";
+    }
+    cout<<endl;
+    for ( int i = 0 ; i < worldSize.y ; i++) {
+        for ( int j = 0 ; j < worldSize.x; j++) {
+            if ( (walls[0].x == j) && walls[0].y == i )
+                cout << " # ";
+            else
+                cout << " x ";
+        }
+        cout << endl;
+    }
+    cout << walls[0].x <<endl;
+    // walls.push_back(coordinates_);
+}
 void AStar::Generator::setWorldSize(Vec2i worldSize_)
 {
     worldSize = worldSize_;
@@ -106,8 +138,7 @@ AStar::CoordinateList AStar::Generator::findPath(Vec2i source_, Vec2i target_)
                 successor->G = totalCost;
                 successor->H = heuristic(successor->coordinates, target_);
                 openSet.insert(successor);
-            }
-            else if (totalCost < successor->G) {
+            } else if (totalCost < successor->G) {
                 successor->parent = current;
                 successor->G = totalCost;
             }

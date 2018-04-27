@@ -52,6 +52,7 @@ namespace AStar
         void addCollision(Vec2i coordinates_);
         void removeCollision(Vec2i coordinates_);
         void clearCollisions();
+        void printWorld();
 
     private:
         HeuristicFunction heuristic;

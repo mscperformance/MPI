@@ -5,17 +5,18 @@ int main()
 {
     AStar::Generator generator;
     // Set 2d map size.
-    generator.setWorldSize({25, 25});
+    generator.setWorldSize({10, 10});
     // You can use a few heuristics : manhattan, euclidean or octagonal.
     generator.setHeuristic(AStar::Heuristic::euclidean);
     generator.setDiagonalMovement(true);
 
+
     cout << "Generate path ..." << endl ;
     // This method returns vector of coordinates from target to source.
     //add collision
-    generator.addCollision({10,10});
-    auto path = generator.findPath({0, 0}, {20, 20});
-
+    generator.addCollision({5,5});
+    generator.printWorld();
+    auto path = generator.findPath({0, 0}, {10,10});
 
     for(auto& coordinate : path) {
         cout << coordinate.x << " " << coordinate.y << endl;
