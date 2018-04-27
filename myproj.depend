@@ -1,0 +1,14 @@
+# depslib dependency file v1.0
+1524823679 source:c:\users\admin\desktop\myproj\astar.cpp
+	"AStar.hpp"
+	<algorithm>
+
+1524823760 c:\users\admin\desktop\myproj\astar.hpp
+	<vector>
+	<functional>
+	<set>
+
+1524823621 source:c:\users\admin\desktop\myproj\main.cpp
+	<iostream>
+	"AStar.hpp"
+
