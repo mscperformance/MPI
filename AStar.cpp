@@ -1,5 +1,4 @@
 
-
 #include "AStar.hpp"
 #include <algorithm>
 #include <iostream>
@@ -32,7 +31,8 @@ AStar::Generator::Generator()
 {
     setDiagonalMovement(false);
     setHeuristic(&Heuristic::manhattan);
-    direction = {
+    direction =
+    {
         { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, 0 },
         { -1, -1 }, { 1, 1 }, { -1, 1 }, { 1, -1 }
     };
@@ -41,39 +41,56 @@ AStar::Generator::Generator()
 void AStar::Generator::printWorld()
 {
     //add labels
-    for ( int j = 0 ; j < worldSize.x; j++) {
+    for ( int j = 0 ; j < worldSize.x; j++)
+    {
         cout << " " << j << " ";
     }
     cout<<endl;
     //divider
-    for ( int j = 0 ; j < worldSize.x; j++) {
+    for ( int j = 0 ; j < worldSize.x; j++)
+    {
         cout<<"---";
     }
     cout<<endl;
     cout<<" x = empty space " <<endl;
     cout<<" # = obstacle " <<endl;
     //divider
-    for ( int j = 0 ; j < worldSize.x; j++) {
+    for ( int j = 0 ; j < worldSize.x; j++)
+    {
         cout<<"---";
     }
     cout<<endl;
-
+    string obstacles[worldSize.y][worldSize.x];
     int wallsSize = walls.size();
     CoordinateList mirroredWalls = walls;
-    for ( int i = 0 ; i < worldSize.y ; i++) {
-        for ( int j = 0 ; j < worldSize.x; j++) {
-            for ( int k = 0 ; k < wallsSize ; k++) {
-                if ( (walls[k].x == j) && walls[k].y == i ) {
-                    cout << " # ";
-                    mirroredWalls.erase(k);
+    for ( int k = 0 ; k < wallsSize ; k++)
+    {
+        for ( int i = 0 ; i < worldSize.y ; i++)
+        {
+            for ( int j = 0 ; j < worldSize.x; j++)
+            {
+                if ( (walls[k].x == j) && walls[k].y == i )
+                {
+                    obstacles[i][j]="#";
+                    // mirroredWalls.erase(k);
                 }
-                 else
-                    cout << " x ";
+                else
+                {
+                    if(obstacles[i][j]!="#")
+                        obstacles[i][j]="x";
+
+                }
+
             }
         }
+    }
+    for ( int i = 0 ; i < worldSize.y ; i++)
+    {
+        for ( int j = 0 ; j < worldSize.x; j++)
+            cout<<obstacles[i][j]<<" ";
+
         cout<<endl;
     }
-
 
 // walls.push_back(coordinates_);
 }
@@ -100,7 +117,8 @@ void AStar::Generator::addCollision(Vec2i coordinates_)
 void AStar::Generator::removeCollision(Vec2i coordinates_)
 {
     auto it = std::find(walls.begin(), walls.end(), coordinates_);
-    if (it != walls.end()) {
+    if (it != walls.end())
+    {
         walls.erase(it);
     }
 }
@@ -116,37 +134,46 @@ AStar::CoordinateList AStar::Generator::findPath(Vec2i source_, Vec2i target_)
     NodeSet openSet, closedSet;
     openSet.insert(new Node(source_));
 
-    while (!openSet.empty()) {
+    while (!openSet.empty())
+    {
         current = *openSet.begin();
-        for (auto node : openSet) {
-            if (node->getScore() <= current->getScore()) {
+        for (auto node : openSet)
+        {
+            if (node->getScore() <= current->getScore())
+            {
                 current = node;
             }
         }
 
-        if (current->coordinates == target_) {
+        if (current->coordinates == target_)
+        {
             break;
         }
 
         closedSet.insert(current);
         openSet.erase(std::find(openSet.begin(), openSet.end(), current));
 
-        for (uint i = 0; i < directions; ++i) {
+        for (uint i = 0; i < directions; ++i)
+        {
             Vec2i newCoordinates(current->coordinates + direction[i]);
             if (detectCollision(newCoordinates) ||
-                findNodeOnList(closedSet, newCoordinates)) {
+                    findNodeOnList(closedSet, newCoordinates))
+            {
                 continue;
             }
 
             uint totalCost = current->G + ((i < 4) ? 10 : 14);
 
             Node *successor = findNodeOnList(openSet, newCoordinates);
-            if (successor == nullptr) {
+            if (successor == nullptr)
+            {
                 successor = new Node(newCoordinates, current);
                 successor->G = totalCost;
                 successor->H = heuristic(successor->coordinates, target_);
                 openSet.insert(successor);
-            } else if (totalCost < successor->G) {
+            }
+            else if (totalCost < successor->G)
+            {
                 successor->parent = current;
                 successor->G = totalCost;
             }
@@ -154,7 +181,8 @@ AStar::CoordinateList AStar::Generator::findPath(Vec2i source_, Vec2i target_)
     }
 
     CoordinateList path;
-    while (current != nullptr) {
+    while (current != nullptr)
+    {
         path.push_back(current->coordinates);
         current = current->parent;
     }
@@ -167,8 +195,10 @@ AStar::CoordinateList AStar::Generator::findPath(Vec2i source_, Vec2i target_)
 
 AStar::Node* AStar::Generator::findNodeOnList(NodeSet& nodes_, Vec2i coordinates_)
 {
-    for (auto node : nodes_) {
-        if (node->coordinates == coordinates_) {
+    for (auto node : nodes_)
+    {
+        if (node->coordinates == coordinates_)
+        {
             return node;
         }
     }
@@ -177,7 +207,8 @@ AStar::Node* AStar::Generator::findNodeOnList(NodeSet& nodes_, Vec2i coordinates
 
 void AStar::Generator::releaseNodes(NodeSet& nodes_)
 {
-    for (auto it = nodes_.begin(); it != nodes_.end();) {
+    for (auto it = nodes_.begin(); it != nodes_.end();)
+    {
         delete *it;
         it = nodes_.erase(it);
     }
@@ -186,8 +217,9 @@ void AStar::Generator::releaseNodes(NodeSet& nodes_)
 bool AStar::Generator::detectCollision(Vec2i coordinates_)
 {
     if (coordinates_.x < 0 || coordinates_.x >= worldSize.x ||
-        coordinates_.y < 0 || coordinates_.y >= worldSize.y ||
-        std::find(walls.begin(), walls.end(), coordinates_) != walls.end()) {
+            coordinates_.y < 0 || coordinates_.y >= worldSize.y ||
+            std::find(walls.begin(), walls.end(), coordinates_) != walls.end())
+    {
         return true;
     }
     return false;
