@@ -15,6 +15,7 @@ int main()
     // This method returns vector of coordinates from target to source.
     //add collision
     generator.addCollision({5,5});
+    generator.addCollision({5,6});
     generator.printWorld();
     auto path = generator.findPath({0, 0}, {10,10});
 

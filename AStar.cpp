@@ -57,17 +57,25 @@ void AStar::Generator::printWorld()
         cout<<"---";
     }
     cout<<endl;
+
+    int wallsSize = walls.size();
+    CoordinateList mirroredWalls = walls;
     for ( int i = 0 ; i < worldSize.y ; i++) {
         for ( int j = 0 ; j < worldSize.x; j++) {
-            if ( (walls[0].x == j) && walls[0].y == i )
-                cout << " # ";
-            else
-                cout << " x ";
+            for ( int k = 0 ; k < wallsSize ; k++) {
+                if ( (walls[k].x == j) && walls[k].y == i ) {
+                    cout << " # ";
+                    mirroredWalls.erase(k);
+                }
+                 else
+                    cout << " x ";
+            }
         }
-        cout << endl;
+        cout<<endl;
     }
-    cout << walls[0].x <<endl;
-    // walls.push_back(coordinates_);
+
+
+// walls.push_back(coordinates_);
 }
 void AStar::Generator::setWorldSize(Vec2i worldSize_)
 {
